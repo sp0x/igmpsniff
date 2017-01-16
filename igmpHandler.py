@@ -30,6 +30,7 @@ class IgmpHandler:
     def __init__(self, pcap_object):
         self.pcaper = pcap_object
         self.on_pk = lambda tm, tp_ip, tp_mac, tp_igmp: None
+        self.source_filter = None
 
     def handle_live(self, plen, buff, ts):
         self.handle(plen, buff, ts)
@@ -49,13 +50,21 @@ class IgmpHandler:
         ip = eth.data 
         if type(ip.data) == dpkt.igmp.IGMP:
             pk_igmp = ip.data
+            if pk_igmp.type == 17:
+                return
+            ipSrc = self.inetAddrStr(ip.src)
+            if self.source_filter is not None:
+                # If we could not find the filter we're looking for, in the source ip
+                if self.source_filter not in ipSrc:
+                    return
+
             str_igmp = str(pk_igmp)
             # igbytes = (bytes(igmpPack)[0])
             # igmp_type = self.igmpPacketTypes[pk_igmp.type]
             igmp_gr = pcap.ntoa(struct.unpack('i', str_igmp[4:8])[0])
             ver = ip.p
             addrs_mac = (self.mac_addr(eth.src), self.mac_addr(eth.dst))
-            addrs_ip = (self.inetAddrStr(ip.src), self.inetAddrStr(ip.dst)) 
+            addrs_ip = (ipSrc, self.inetAddrStr(ip.dst))
             self.on_pk(ts, addrs_ip, addrs_mac, (pk_igmp.type, igmp_gr, ver))
 
     def set_on_packet(self, on_packet):
@@ -157,6 +166,7 @@ class IgmpHandler:
             #print '  data:'
             # IgmpHandler.dump_hex(decoded['data'])
 
-
+    def set_src_filter(self, source_filter):
+        self.source_filter = source_filter
 
 # endregion
