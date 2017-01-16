@@ -1,6 +1,4 @@
 import MySQLdb
-from sql import *
-from sql.aggregate import *
 import sys
 
 
