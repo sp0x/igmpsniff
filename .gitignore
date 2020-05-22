@@ -2,3 +2,4 @@
 *.suo
 *.pyc
 *.pcap
+.idea
