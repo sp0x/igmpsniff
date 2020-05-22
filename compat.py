@@ -8,11 +8,11 @@ else:
     def compat_ord(char):
         return char
 
-try:
-    from itertools import izip
-    compat_izip = izip
-except ImportError:
-    compat_izip = izip
+# try:
+#     from itertools import izip
+#     compat_izip = izip
+# except ImportError:
+#     compat_izip = izip
 
 try:
     from cStringIO import StringIO

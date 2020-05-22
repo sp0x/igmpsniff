@@ -1,6 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
-import pcap
+import pcap #PyPCAP
+#libpcap-dev
 import dpkt
 
 import sys
@@ -12,7 +13,7 @@ import struct
 import compat
 import os.path
 import os
-import ConfigParser
+import configparser
 import igmpStorage
 import datetime, time
 
@@ -26,7 +27,7 @@ balancer = FlowBalancer()
 def load_config():
     base = os.path.dirname(os.path.realpath(__file__))
     cfg_path = os.path.join(base, 'conf', 'config.ini')
-    c_parser = ConfigParser.ConfigParser()
+    c_parser = configparser.ConfigParser()
     c_parser.read(cfg_path)
     return c_parser
 
@@ -67,7 +68,7 @@ def init_storage(cfg):
 
 def on_complete():
     storage.close()
-    print "Complete syncing. Press any key to exit"
+    print("Complete syncing. Press any key to exit")
     sys.exit()
 
 
@@ -116,6 +117,6 @@ if __name__ == '__main__':
         balancer.run_consumer()
         handler.open_and_handle(targetFile)
         balancer.finalize(on_complete)
-        raw_input("Synchronizing pcap file..\n")
+        input("Synchronizing pcap file..\n")
 
     storage.close()

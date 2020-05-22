@@ -58,7 +58,7 @@ class PacketStorage:
                 self.__insid += 1
                 return cur.lastrowid
             return None
-        except MySQLdb.Error, e:
+        except MySQLdb.Error as e:
             self.db.rollback()
             e = e
 
@@ -87,7 +87,7 @@ class PacketStorage:
             cur.execute(sql[0])
             cur.execute(sql[1])
             self.db.commit()
-        except MySQLdb.Error, e:
+        except MySQLdb.Error as e:
             self.db.rollback()
 
     def set_commitsize(self, db_commit_interval):

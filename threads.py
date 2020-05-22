@@ -1,7 +1,7 @@
 from threading import Thread, Lock, Condition
 import time
 import random
-from Queue import Queue
+from queue import Queue
 
 
 class FlowBalancer:

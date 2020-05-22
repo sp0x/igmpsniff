@@ -10,7 +10,6 @@ import struct
 import compat
 
 
-
 class IgmpHandler:
     protocols = {socket.IPPROTO_TCP: 'tcp',
                  socket.IPPROTO_UDP: 'udp',
@@ -47,7 +46,7 @@ class IgmpHandler:
         """
         # self.print_packet(len(buff), buff, ts)
         eth = dpkt.ethernet.Ethernet(buff)
-        ip = eth.data 
+        ip = eth.data
         if type(ip.data) == dpkt.igmp.IGMP:
             pk_igmp = ip.data
             if pk_igmp.type == 17:
@@ -82,9 +81,9 @@ class IgmpHandler:
             while 1:
                 self.pcaper.dispatch(1, self.handle_live)
         except KeyboardInterrupt:
-            print '%s' % sys.exc_type
-            print 'shutting down'
-            print '%d packets received, %d packets dropped, %d packets dropped by interface' % self.pcaper.stats()
+            print('%s' % sys.exc_type)
+            print('shutting down')
+            print('%d packets received, %d packets dropped, %d packets dropped by interface' % self.pcaper.stats())
 
     def open_and_handle(self, filename):
         f = open(filename)
@@ -99,6 +98,7 @@ class IgmpHandler:
     @staticmethod
     def mac_addr(address):
         return ':'.join('%02x' % compat.compat_ord(b) for b in address)
+
     @staticmethod
     def inetAddrStr(inet):
         try:
@@ -136,11 +136,11 @@ class IgmpHandler:
         for i in xrange(0, len(bytes) / 16):
             x1 = string.join(bytes[i * 16:(i + 1) * 16], ' ')
             x2 = string.join(bytes[(i + 1) * 16:], ' ')
-            print '    %s' % x1
-            print '    %s' % x2
+            print('    %s' % x1)
+            print('    %s' % x2)
             out += '    %s' % x1 + '    %s' % x2
         if rows == 0:
-            print ' '.join(bytes)
+            print(' '.join(bytes))
             out += ' '.join(bytes)
         return out
 
@@ -153,17 +153,17 @@ class IgmpHandler:
 
         if data[12:14] == '\x08\x00':
             decoded = IgmpHandler.decode_ip_packet(data[14:])
-            print '	%s.%f %s > %s PROTO %s' % (time.strftime('%H:%M',
-                                                     time.localtime(timestamp)),
-                                       timestamp % 60,
-                                       decoded['source_address'],
-                                       decoded['destination_address'],
-									   protocols[decoded['protocol']])
-            #for key in ['version', 'header_len', 'tos', 'total_len', 'id',
+            print('	%s.%f %s > %s PROTO %s' % (time.strftime('%H:%M',
+                                                                time.localtime(timestamp)),
+                                                  timestamp % 60,
+                                                  decoded['source_address'],
+                                                  decoded['destination_address'],
+                                                  protocols[decoded['protocol']]))
+            # for key in ['version', 'header_len', 'tos', 'total_len', 'id',
             #            'flags', 'fragment_offset', 'ttl']:
             #    print '  %s: %d' % (key, decoded[key]) 
-            #print '  header checksum: %d' % decoded['checksum']
-            #print '  data:'
+            # print '  header checksum: %d' % decoded['checksum']
+            # print '  data:'
             # IgmpHandler.dump_hex(decoded['data'])
 
     def set_src_filter(self, source_filter):
